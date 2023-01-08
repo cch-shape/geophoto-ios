@@ -56,5 +56,10 @@ struct ContentView_Previews: PreviewProvider {
             .previewDisplayName("iPhone SE")
             .environmentObject(SettingsModel())
             .environmentObject(AuthenticationModel())
+        ContentView()
+            .previewDevice(PreviewDevice(rawValue: "iPad (10th generation)"))
+            .previewDisplayName("iPad")
+            .environmentObject(SettingsModel())
+            .environmentObject(AuthenticationModel())
     }
 }
