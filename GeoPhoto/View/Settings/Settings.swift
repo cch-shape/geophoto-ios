@@ -14,6 +14,13 @@ struct Settings: View {
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("Appearance")) {
+                    Picker("Theme", selection: $settings.theme) {
+                        ForEach(SettingsModel.Theme.allCases) {
+                            Text($0.rawValue).tag($0)
+                        }
+                    }
+                }
                 if !authentication.biometryType.isEmpty {
                     Section(
                         header: Text("Security"),

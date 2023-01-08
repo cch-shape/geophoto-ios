@@ -10,6 +10,21 @@ import Combine
 import SwiftUI
 
 final class SettingsModel: ObservableObject {
+    enum Theme: String, CaseIterable, Identifiable {
+        case System, Light, Dark
+        var id: Theme { self }
+    }
+    @AppStorage("theme") var theme = Theme.System
+    var preferredTheme: ColorScheme? {
+        switch theme {
+        case .Light:
+            return .light
+        case .Dark:
+            return .dark
+        default:
+            return nil
+        }
+    }
     @AppStorage("appLockEnabled") var appLockEnabled = false
     @AppStorage("appLockTimeout") var appLockTimeout = 15.0
 }

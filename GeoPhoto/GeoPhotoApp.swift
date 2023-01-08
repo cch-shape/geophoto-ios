@@ -17,6 +17,7 @@ struct GeoPhotoApp: App {
             Router(GuardView: GuardView(), ProtectedView: ContentView())
                 .environmentObject(settings)
                 .environmentObject(authentication)
+                .preferredColorScheme(settings.preferredTheme)
         }
     }
 }
