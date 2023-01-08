@@ -47,5 +47,8 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPhone SE (3rd generation)"))
             .previewDisplayName("iPhone SE")
+        ContentView()
+            .previewDevice(PreviewDevice(rawValue: "iPad (10th generation)"))
+            .previewDisplayName("iPad")
     }
 }
