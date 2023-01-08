@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct GeoPhotoApp: App {
+    @StateObject private var settings = SettingsModel()
+    @StateObject private var authentication = AuthenticationModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Router(GuardView: GuardView(), ProtectedView: ContentView())
+                .environmentObject(settings)
+                .environmentObject(authentication)
         }
     }
 }

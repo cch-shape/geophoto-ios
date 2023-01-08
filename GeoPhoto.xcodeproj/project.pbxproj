@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325F9E44296ABCA500342BDD /* SettingsModel.swift */; };
+		326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CD844296AFE0700DFB285 /* AuthenticationModel.swift */; };
 		329255812969F4DD0082CA66 /* GeoPhotoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329255802969F4DD0082CA66 /* GeoPhotoApp.swift */; };
 		329255832969F4DD0082CA66 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329255822969F4DD0082CA66 /* ContentView.swift */; };
 		329255852969F4DD0082CA66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 329255842969F4DD0082CA66 /* Assets.xcassets */; };
@@ -14,6 +16,8 @@
 		329255922969F4DE0082CA66 /* GeoPhotoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329255912969F4DE0082CA66 /* GeoPhotoTests.swift */; };
 		3292559C2969F4DE0082CA66 /* GeoPhotoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3292559B2969F4DE0082CA66 /* GeoPhotoUITests.swift */; };
 		3292559E2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3292559D2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift */; };
+		32EFB2D0296B290F00DEB847 /* GuardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFB2CF296B290F00DEB847 /* GuardView.swift */; };
+		32EFB2D4296B471F00DEB847 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFB2D3296B471F00DEB847 /* Router.swift */; };
 		32EFF05F296A03BC00F51BD3 /* PhotoMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */; };
 		32EFF061296A03DA00F51BD3 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF060296A03DA00F51BD3 /* Home.swift */; };
 		32EFF063296A046200F51BD3 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF062296A046200F51BD3 /* PhotoList.swift */; };
@@ -41,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		325F9E44296ABCA500342BDD /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
+		326CD844296AFE0700DFB285 /* AuthenticationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationModel.swift; sourceTree = "<group>"; };
 		3292557D2969F4DD0082CA66 /* GeoPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		329255802969F4DD0082CA66 /* GeoPhotoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPhotoApp.swift; sourceTree = "<group>"; };
 		329255822969F4DD0082CA66 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +57,8 @@
 		329255972969F4DE0082CA66 /* GeoPhotoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeoPhotoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3292559B2969F4DE0082CA66 /* GeoPhotoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPhotoUITests.swift; sourceTree = "<group>"; };
 		3292559D2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPhotoUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		32EFB2CF296B290F00DEB847 /* GuardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardView.swift; sourceTree = "<group>"; };
+		32EFB2D3296B471F00DEB847 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMap.swift; sourceTree = "<group>"; };
 		32EFF060296A03DA00F51BD3 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		32EFF062296A046200F51BD3 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
@@ -146,7 +154,9 @@
 		32EFF05A296A02D800F51BD3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				32EFB2D3296B471F00DEB847 /* Router.swift */,
 				329255822969F4DD0082CA66 /* ContentView.swift */,
+				32EFB2CF296B290F00DEB847 /* GuardView.swift */,
 				32EFF071296A09CF00F51BD3 /* Friends */,
 				32EFF06E296A098700F51BD3 /* Home */,
 				32EFF06C296A088A00F51BD3 /* MyPhoto */,
@@ -159,6 +169,8 @@
 		32EFF05C296A034F00F51BD3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				325F9E44296ABCA500342BDD /* SettingsModel.swift */,
+				326CD844296AFE0700DFB285 /* AuthenticationModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -342,12 +354,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32EFB2D0296B290F00DEB847 /* GuardView.swift in Sources */,
 				329255832969F4DD0082CA66 /* ContentView.swift in Sources */,
 				32EFF063296A046200F51BD3 /* PhotoList.swift in Sources */,
 				32EFF061296A03DA00F51BD3 /* Home.swift in Sources */,
 				32EFF06B296A086E00F51BD3 /* MyPhoto.swift in Sources */,
 				32EFF069296A072200F51BD3 /* Friends.swift in Sources */,
+				32EFB2D4296B471F00DEB847 /* Router.swift in Sources */,
 				32EFF065296A046C00F51BD3 /* PhotoTimeline.swift in Sources */,
+				325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */,
+				326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */,
 				32EFF067296A068D00F51BD3 /* Settings.swift in Sources */,
 				32EFF05F296A03BC00F51BD3 /* PhotoMap.swift in Sources */,
 				329255812969F4DD0082CA66 /* GeoPhotoApp.swift in Sources */,
