@@ -31,7 +31,7 @@ final class AuthenticationModel: ObservableObject {
         }
     }
     
-    func Prompt(callback: @escaping (Bool) -> Void = { _ in }) {
+    func Prompt(callback: @escaping (Bool) -> Void = { _ in }, message: String = "Unlock the App") {
         guard biometryType != "" else {
             isAuthenticated = true
             return
@@ -39,7 +39,7 @@ final class AuthenticationModel: ObservableObject {
         
         context.evaluatePolicy(
             .deviceOwnerAuthentication,
-            localizedReason: "Unlock the App",
+            localizedReason: message,
             reply: { success, error in
                 guard error == nil else {
                     print(error!.localizedDescription)

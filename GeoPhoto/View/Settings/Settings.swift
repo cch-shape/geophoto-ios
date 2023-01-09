@@ -17,13 +17,16 @@ struct Settings: View {
         get: { self.settings.appLockEnabled },
         set: { v in
             if v {
-                authentication.Prompt(callback: { success in
-                    if success {
-                        DispatchQueue.main.async(){
-                            self.settings.appLockEnabled = true
+                authentication.Prompt(
+                    callback: { success in
+                        if success {
+                            DispatchQueue.main.async(){
+                                self.settings.appLockEnabled = true
+                            }
                         }
-                    }
-                })
+                    },
+                    message: "Enable App Lock"
+                )
             } else {
                 self.settings.appLockEnabled = false
                 self.authentication.isAuthenticated = false
