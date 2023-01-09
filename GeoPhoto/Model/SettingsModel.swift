@@ -31,4 +31,22 @@ final class SettingsModel: ObservableObject {
         case Private, Friends, Groups
         var id: PhotoVisibility { self }
     }
+    @AppStorage("uploadPhotoByDefault") var uploadPhotoByDefault = false {
+        didSet {
+            if !uploadPhotoByDefault {
+                defaultPhotoVisibility = PhotoVisibility.Private
+            }
+        }
+    }
+    @AppStorage("defaultPhotoVisibility") var defaultPhotoVisibility = PhotoVisibility.Private
+//    struct Person: Codable, Identifiable {
+//        var id: String
+//        var name: String
+//        var telCountryCode: String
+//        var tel: String
+//    }
+//    struct VisibilityGroup: Codable {
+//        var name: String
+//        var members: [Person]
+//    }
 }

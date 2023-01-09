@@ -63,10 +63,27 @@ struct Settings: View {
                         }
                     }
                 }
+                Section(header: Text("Privacy")) {
+                    Toggle("Upload Photo by Default", isOn: $settings.uploadPhotoByDefault)
+                    Picker("Default Photo Visibility", selection: $settings.defaultPhotoVisibility) {
+                        ForEach(SettingsModel.PhotoVisibility.allCases) {
+                            Text($0.rawValue).tag($0)
+                        }
+                    }
+                    NavigationLink("Visibility Groups", destination: VisibilityGroup())
+                }
             }
             .navigationBarTitle("Settings")
             .pickerStyle(.navigationLink)
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+}
+
+struct Settings_Previews: PreviewProvider {
+    static var previews: some View {
+        Settings()
+            .environmentObject(SettingsModel())
+            .environmentObject(AuthenticationModel())
     }
 }

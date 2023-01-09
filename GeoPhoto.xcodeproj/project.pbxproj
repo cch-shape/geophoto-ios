@@ -18,6 +18,7 @@
 		3292559E2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3292559D2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift */; };
 		32EFB2D0296B290F00DEB847 /* GuardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFB2CF296B290F00DEB847 /* GuardView.swift */; };
 		32EFB2D4296B471F00DEB847 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFB2D3296B471F00DEB847 /* Router.swift */; };
+		32EFB2D6296B641E00DEB847 /* VisibilityGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFB2D5296B641E00DEB847 /* VisibilityGroup.swift */; };
 		32EFF05F296A03BC00F51BD3 /* PhotoMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */; };
 		32EFF061296A03DA00F51BD3 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF060296A03DA00F51BD3 /* Home.swift */; };
 		32EFF063296A046200F51BD3 /* PhotoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF062296A046200F51BD3 /* PhotoList.swift */; };
@@ -59,6 +60,7 @@
 		3292559D2969F4DE0082CA66 /* GeoPhotoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoPhotoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		32EFB2CF296B290F00DEB847 /* GuardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardView.swift; sourceTree = "<group>"; };
 		32EFB2D3296B471F00DEB847 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
+		32EFB2D5296B641E00DEB847 /* VisibilityGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibilityGroup.swift; sourceTree = "<group>"; };
 		32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMap.swift; sourceTree = "<group>"; };
 		32EFF060296A03DA00F51BD3 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		32EFF062296A046200F51BD3 /* PhotoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoList.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				32EFF066296A068D00F51BD3 /* Settings.swift */,
+				32EFB2D5296B641E00DEB847 /* VisibilityGroup.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				32EFF063296A046200F51BD3 /* PhotoList.swift in Sources */,
 				32EFF061296A03DA00F51BD3 /* Home.swift in Sources */,
 				32EFF06B296A086E00F51BD3 /* MyPhoto.swift in Sources */,
+				32EFB2D6296B641E00DEB847 /* VisibilityGroup.swift in Sources */,
 				32EFF069296A072200F51BD3 /* Friends.swift in Sources */,
 				32EFB2D4296B471F00DEB847 /* Router.swift in Sources */,
 				32EFF065296A046C00F51BD3 /* PhotoTimeline.swift in Sources */,
@@ -531,6 +535,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -559,6 +564,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
