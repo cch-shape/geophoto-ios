@@ -11,6 +11,26 @@ struct Settings: View {
     @EnvironmentObject var settings: SettingsModel
     @EnvironmentObject var authentication: AuthenticationModel
     
+    // Wrapping "Enable App Lock" setting into computed property
+    // so an authentication request can be prompted before enabling
+    private var appLockEnableAuthWrapper: Binding<Bool> { Binding (
+        get: { self.settings.appLockEnabled },
+        set: { v in
+            if v {
+                authentication.Prompt(callback: { success in
+                    if success {
+                        DispatchQueue.main.async(){
+                            self.settings.appLockEnabled = true
+                        }
+                    }
+                })
+            } else {
+                self.settings.appLockEnabled = false
+                self.authentication.isAuthenticated = false
+            }
+        }
+    )}
+    
     var body: some View {
         NavigationView {
             Form {
@@ -26,13 +46,11 @@ struct Settings: View {
                         header: Text("Security"),
                         footer: Text("Use \(authentication.biometryType) to unlock this App")
                     ){
-                        Toggle("Enable App Lock", isOn: $settings.appLockEnabled)
-                            .onChange(of: settings.appLockEnabled, perform: { _ in
-                                authentication.isAuthenticated = true
-                            })
+                        Toggle("Enable App Lock", isOn: appLockEnableAuthWrapper)
                         if settings.appLockEnabled {
                             Picker("App Lock Timeout", selection: $settings.appLockTimeout) {
                                 Text("Instant").tag(0.0)
+                                Text("1 minute").tag(60.0)
                                 Text("5 minutes").tag(300.0)
                                 Text("10 minutes").tag(600.0)
                                 Text("15 minutes").tag(900.0)
@@ -45,7 +63,7 @@ struct Settings: View {
             }
             .navigationBarTitle("Settings")
             .pickerStyle(.navigationLink)
-            
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

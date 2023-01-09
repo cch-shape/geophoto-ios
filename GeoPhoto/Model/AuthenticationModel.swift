@@ -8,7 +8,6 @@
 import Foundation
 import LocalAuthentication
 
-@MainActor
 final class AuthenticationModel: ObservableObject {
     var context = LAContext()
     var biometryType: String
@@ -32,27 +31,33 @@ final class AuthenticationModel: ObservableObject {
         }
     }
     
-    func Prompt() {
+    func Prompt(callback: @escaping (Bool) -> Void = { _ in }) {
         guard biometryType != "" else {
             isAuthenticated = true
             return
         }
         
-        Task {
-            do {
-                try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Unlock the App")
-                isAuthenticated = true
-                authenticatedAt = Date.now
-                context = LAContext()
-            } catch let error {
-                print(error.localizedDescription)
+        context.evaluatePolicy(
+            .deviceOwnerAuthentication,
+            localizedReason: "Unlock the App",
+            reply: { success, error in
+                guard error == nil else {
+                    print(error!.localizedDescription)
+                    callback(success)
+                    return
+                }
+                
+                DispatchQueue.main.async() {
+                    self.isAuthenticated = true
+                    self.authenticatedAt = Date.now
+                    self.context = LAContext()
+                    callback(success)
+                }
             }
-        }
+        )
     }
     
     func checkAppLockTimeout(appLockTimeOut: Double) {
-        print("c")
-        print(abs(authenticatedAt.timeIntervalSinceNow), appLockTimeOut)
         if abs(authenticatedAt.timeIntervalSinceNow) >= appLockTimeOut {
             isAuthenticated = false
         }

@@ -27,4 +27,8 @@ final class SettingsModel: ObservableObject {
     }
     @AppStorage("appLockEnabled") var appLockEnabled = false
     @AppStorage("appLockTimeout") var appLockTimeout = 15.0
+    enum PhotoVisibility: String, CaseIterable, Identifiable {
+        case Private, Friends, Groups
+        var id: PhotoVisibility { self }
+    }
 }
