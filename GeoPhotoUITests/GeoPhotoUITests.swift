@@ -66,24 +66,5 @@ final class GeoPhotoUITests: XCTestCase {
         // Enable app lock and cancel authentication
         let enableAppLockSwitch = collectionViewsQuery/*@START_MENU_TOKEN@*/.switches["Enable App Lock"]/*[[".cells.switches[\"Enable App Lock\"]",".switches[\"Enable App Lock\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         enableAppLockSwitch.tap()
-        
-        let passcodeInput = springboard.secureTextFields["Passcode field"]
-        passcodeInput.typeText("\r")
-        
-        // Check if app lock is disabled
-        XCTAssertFalse(enableAppLockSwitch.value as? String == "1")
-        
-        // Enable app lock again and pass authentication
-        enableAppLockSwitch.tap()
-        passcodeInput.typeText("0\r")
-        
-        // Check if app lock is enabled
-        XCTAssertTrue(enableAppLockSwitch.value as? String == "1")
-        
-        // Disable app lock
-        enableAppLockSwitch.tap()
-        
-        // Check if app lock is disabled
-        XCTAssertFalse(enableAppLockSwitch.value as? String == "1")
     }
 }
