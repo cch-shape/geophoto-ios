@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var selection = 1
+    @EnvironmentObject var settings: SettingsModel
+    @EnvironmentObject var authentication: AuthenticationModel
+    
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             Home()
                 .badge(0)
                 .tabItem{
@@ -35,6 +39,7 @@ struct ContentView: View {
                 .tabItem{
                     Label("Settings", systemImage: "gearshape")
                 }
+                .tag(1)
         }
     }
 }
@@ -44,11 +49,17 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")
+            .environmentObject(SettingsModel())
+            .environmentObject(AuthenticationModel())
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPhone SE (3rd generation)"))
             .previewDisplayName("iPhone SE")
+            .environmentObject(SettingsModel())
+            .environmentObject(AuthenticationModel())
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPad (10th generation)"))
             .previewDisplayName("iPad")
+            .environmentObject(SettingsModel())
+            .environmentObject(AuthenticationModel())
     }
 }
