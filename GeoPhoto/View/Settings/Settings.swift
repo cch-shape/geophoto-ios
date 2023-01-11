@@ -35,7 +35,7 @@ struct Settings: View {
     )}
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section(header: Text("Appearance")) {
                     Picker("Theme", selection: $settings.theme) {

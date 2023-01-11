@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ContentView: View {
-    @State var selection = 1
+    @StateObject var photoData = PhotoData()
     @EnvironmentObject var settings: SettingsModel
     @EnvironmentObject var authentication: AuthenticationModel
     
     var body: some View {
-        TabView(selection: $selection) {
+        TabView() {
             Home()
                 .badge(0)
                 .tabItem{
@@ -22,13 +23,15 @@ struct ContentView: View {
             MyPhoto()
                 .badge(0)
                 .tabItem{
-                    Label("MyPhoto", systemImage: "photo.fill.on.rectangle.fill")
+                    Label("My Photo", systemImage: "photo.fill.on.rectangle.fill")
                 }
+                .environmentObject(photoData)
             PhotoMap()
                 .badge(0)
                 .tabItem{
                     Label("Map", systemImage: "pin.circle")
                 }
+                .environmentObject(photoData)
             Friends()
                 .badge(0)
                 .tabItem{
@@ -39,7 +42,6 @@ struct ContentView: View {
                 .tabItem{
                     Label("Settings", systemImage: "gearshape")
                 }
-                .tag(1)
         }
     }
 }
