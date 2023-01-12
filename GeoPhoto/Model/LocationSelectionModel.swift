@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class LocationQueryResult: ObservableObject{
+class LocationSelectionModel: ObservableObject{
     struct Option: Identifiable {
         let id = UUID()
         var name: String
@@ -17,26 +17,18 @@ class LocationQueryResult: ObservableObject{
     }
     
     @Published var options: [Option] = []
-    @Published var showQueryResult = false
     @Published var selected: Option = Option(name: "", address: "", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 1))
     
     func append(name: String, address: String, coordinate: CLLocationCoordinate2D) {
         self.options.append(Option(name: name, address: address, coordinate: coordinate))
     }
     
-    func show() {
-        if !self.options.isEmpty {
-            showQueryResult = true
-        }
-    }
-    
-    func dismiss() {
+    func clearOptions() {
         self.options.removeAll()
-        showQueryResult = false
     }
     
     func select(_ opt: Option) {
         self.selected = opt
-        dismiss()
+        clearOptions()
     }
 }

@@ -10,16 +10,18 @@ import MapKit
 import Contacts
 
 struct LocationPicker: View {
-    @StateObject var lm = LocationModel()
-    @Binding var region: MKCoordinateRegion
+    @State var region: MKCoordinateRegion
+    @State var searchMode: Bool
+    
+    @ObservedObject var locationSelection: LocationSelectionModel
+    @EnvironmentObject var locationModel: LocationModel
     struct Marker: Identifiable {
         let id = UUID()
     }
 
     @State private var showLocationOffAlert = false
     @State private var showLocationDeinedAlert = false
-    
-    @State private var searchMode = false
+
     private var searchModeBindWrapper: Binding<Bool> { Binding (
         get: { self.searchMode },
         set: { v in
@@ -27,7 +29,7 @@ struct LocationPicker: View {
                 self.searchMode = v
                 return
             }
-            switch lm.locationManager.authorizationStatus {
+            switch locationModel.locationManager.authorizationStatus {
             case .authorizedWhenInUse:
                 self.searchMode = v
                 return
@@ -38,7 +40,7 @@ struct LocationPicker: View {
                 }
                 showLocationDeinedAlert = true
             case .notDetermined:
-                lm.locationManager.requestWhenInUseAuthorization()
+                locationModel.locationManager.requestWhenInUseAuthorization()
                 return
             default:
                 return
@@ -46,32 +48,31 @@ struct LocationPicker: View {
         }
     )}
     @State private var query = ""
+    @State private var showSelectionSheet = false
     @State private var reselectingAddress = false
     @State private var showNoResultAlert = false
     @FocusState private var searchFocusing: Bool
-    @StateObject private var queryResult = LocationQueryResult()
     
     var body: some View {
         VStack(spacing: 8) {
             ModeSwitcher
             
-            MiniMap
-            
             if searchMode {
-                if reselectingAddress || queryResult.selected.address.isEmpty {
+                if reselectingAddress || locationSelection.selected.address.isEmpty {
                     AddressSearchGroup
                 } else {
                     Button {
-                        query = queryResult.selected.name
                         reselectingAddress = true
                         searchFocusing = true
                     } label: {
                         AddressFooter
                     }
                 }
-            } else if !queryResult.selected.address.isEmpty {
+            } else if !locationSelection.selected.address.isEmpty {
                 AddressFooter
             }
+            
+            MiniMap
         }
         .transaction { transaction in
             transaction.animation = nil
@@ -82,11 +83,11 @@ struct LocationPicker: View {
     private func panTo() {
         var coord: CLLocationCoordinate2D
         if searchMode {
-            coord = queryResult.selected.coordinate
+            coord = locationSelection.selected.coordinate
         } else {
-            guard let c = lm.locationManager.location?.coordinate else { return }
+            guard let c = locationModel.locationManager.location?.coordinate else { return }
             coord = c
-            queryResult.selected.coordinate = coord
+            locationSelection.selected.coordinate = coord
             geocodingCurrentLocation()
         }
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
@@ -94,7 +95,7 @@ struct LocationPicker: View {
     }
     
     private func searchLocation(query: String) {
-        queryResult.dismiss()
+        locationSelection.clearOptions()
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = query
         let search = MKLocalSearch(request: searchRequest)
@@ -104,36 +105,35 @@ struct LocationPicker: View {
                 showNoResultAlert = true
                 return
             }
-            DispatchQueue.main.async() {
-                for item in response.mapItems {
-                    if let name = item.name, let location = item.placemark.location {
-                        queryResult.append(name: name, address: item.placemark.title ?? "", coordinate: location.coordinate)
-                    }
+            for item in response.mapItems {
+                if let name = item.name, let location = item.placemark.location {
+                    locationSelection.append(name: name, address: item.placemark.title ?? "", coordinate: location.coordinate)
                 }
-                if queryResult.options.isEmpty {
-                    showNoResultAlert = true
-                } else {
-                    queryResult.show()
-                }
+            }
+            if locationSelection.options.isEmpty {
+                showNoResultAlert = true
             }
         }
     }
     
     private func geocodingCurrentLocation() {
-        guard !searchMode && lm.locationManager.authorizationStatus == .authorizedWhenInUse else { return }
-        guard let coord = lm.locationManager.location?.coordinate else { return }
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coord.latitude, longitude: coord.longitude)) { placemarks, error in
+        guard !searchMode && locationModel.locationManager.authorizationStatus == .authorizedWhenInUse else { return }
+        guard let coord = locationModel.locationManager.location?.coordinate else { return }
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coord.latitude, longitude: coord.longitude)) {
+            placemarks, error in
             guard let placemark = placemarks?.first else { return }
             let formatter = CNPostalAddressFormatter()
             let address = formatter.string(from: placemark.postalAddress!).split(separator: "\n").reversed().joined(separator: ", ")
-            queryResult.selected.address = address
+            locationSelection.select(LocationSelectionModel.Option(
+                name: address, address: address, coordinate: coord
+            ))
         }
     }
     
     // Custom Views
     var ModeSwitcher: some View {
         Picker("EditMode`", selection: searchModeBindWrapper) {
-            Image(systemName: lm.locationManager.authorizationStatus == .authorizedWhenInUse ? "pin.fill" : "pin.slash")
+            Image(systemName: locationModel.locationManager.authorizationStatus == .authorizedWhenInUse ? "pin.fill" : "pin.slash")
                 .tag(false)
             Image(systemName: "magnifyingglass")
                 .tag(true)
@@ -155,18 +155,17 @@ struct LocationPicker: View {
             Map(
                 coordinateRegion: $region,
                 showsUserLocation: !searchMode,
-                annotationItems: searchMode ? [queryResult.selected] : []
+                annotationItems: searchMode ? [locationSelection.selected] : []
             ) { item in
                 MapMarker(coordinate: item.coordinate)
             }
-            .onAppear{
-                searchMode = lm.locationManager.authorizationStatus != .authorizedWhenInUse
-                panTo()
-            }
             .onChange(of: searchMode, perform: { _ in
+                if searchMode {
+                    
+                }
                 panTo()
             })
-            .onChange(of: lm.locationManager.authorizationStatus, perform: { status in
+            .onChange(of: locationModel.locationManager.authorizationStatus, perform: { status in
                 if status != .authorizedWhenInUse && !searchMode {
                     searchMode = true
                 }
@@ -183,8 +182,9 @@ struct LocationPicker: View {
                         } label: {
                             Image(systemName: "location.fill")
                                 .padding()
-                                .background(in: Circle())
+                                .background(.background)
                         }
+                        .clipShape(Circle())
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 10)
@@ -200,7 +200,10 @@ struct LocationPicker: View {
                 .foregroundColor(Color(UIColor.placeholderText))
             TextField("Search Location...", text: $query)
                 .focused($searchFocusing)
-                .submitLabel(.return)
+                .submitLabel(.search)
+                .onSubmit {
+                    searchLocation(query: query)
+                }
                 .alert("No match found", isPresented: $showNoResultAlert) {
                     Button("Try Again") {
                         searchFocusing = true
@@ -210,37 +213,34 @@ struct LocationPicker: View {
                     }
                 }
             if !query.isEmpty {
-                if searchFocusing {
-                    Button {
-                        searchLocation(query: query)
-                    } label: {
-                        Text("Search")
-                    }
-                } else {
-                    Button {
-                        query = ""
-                    } label: {
-                        Image(systemName: "multiply.circle.fill")
-                            .foregroundColor(.gray)
-                    }
+                Button {
+                    query = ""
+                    searchFocusing = false
+                    reselectingAddress = false
+                } label: {
+                    Image(systemName: "multiply.circle.fill")
+                        .foregroundColor(.gray)
                 }
             }
         }
         .padding()
         .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.secondarySystemGroupedBackground)))
-        .sheet(isPresented: $queryResult.showQueryResult) { QueryResultSheet }
+        .sheet(isPresented: $showSelectionSheet) { QueryResultSheet }
+        .onReceive(locationSelection.$options, perform: { opt in
+            showSelectionSheet = !opt.isEmpty
+        })
     }
     
     var AddressFooter: some View {
-        Text(queryResult.selected.address)
+        Text(locationSelection.selected.address)
             .font(.footnote)
     }
     
     var QueryResultSheet: some View {
         NavigationView {
-            List(queryResult.options) { result in
+            List(locationSelection.options) { result in
                 Button {
-                    queryResult.select(result)
+                    locationSelection.select(result)
                     query = ""
                     reselectingAddress = false
                     panTo()
@@ -256,7 +256,7 @@ struct LocationPicker: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel", role: .cancel) {
-                        queryResult.dismiss()
+                        locationSelection.clearOptions()
                     }
                 }
             }

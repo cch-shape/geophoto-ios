@@ -15,7 +15,7 @@
 		32500937296F75AC00FEF5AD /* NewPhotoForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500936296F75AC00FEF5AD /* NewPhotoForm.swift */; };
 		32500939296F787200FEF5AD /* ImagePickerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500938296F787200FEF5AD /* ImagePickerCard.swift */; };
 		3250093B296F7D8C00FEF5AD /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3250093A296F7D8C00FEF5AD /* LocationPicker.swift */; };
-		325009442970296000FEF5AD /* LocationQueryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325009432970296000FEF5AD /* LocationQueryResult.swift */; };
+		325009442970296000FEF5AD /* LocationSelectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325009432970296000FEF5AD /* LocationSelectionModel.swift */; };
 		325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325F9E44296ABCA500342BDD /* SettingsModel.swift */; };
 		326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CD844296AFE0700DFB285 /* AuthenticationModel.swift */; };
 		329255812969F4DD0082CA66 /* GeoPhotoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329255802969F4DD0082CA66 /* GeoPhotoApp.swift */; };
@@ -32,7 +32,6 @@
 		32EFF05F296A03BC00F51BD3 /* PhotoMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */; };
 		32EFF061296A03DA00F51BD3 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF060296A03DA00F51BD3 /* Home.swift */; };
 		32EFF063296A046200F51BD3 /* Gallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF062296A046200F51BD3 /* Gallery.swift */; };
-		32EFF065296A046C00F51BD3 /* Timeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF064296A046C00F51BD3 /* Timeline.swift */; };
 		32EFF067296A068D00F51BD3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF066296A068D00F51BD3 /* Settings.swift */; };
 		32EFF069296A072200F51BD3 /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF068296A072200F51BD3 /* Friends.swift */; };
 		32EFF06B296A086E00F51BD3 /* MyPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF06A296A086E00F51BD3 /* MyPhoto.swift */; };
@@ -65,7 +64,7 @@
 		32500936296F75AC00FEF5AD /* NewPhotoForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPhotoForm.swift; sourceTree = "<group>"; };
 		32500938296F787200FEF5AD /* ImagePickerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCard.swift; sourceTree = "<group>"; };
 		3250093A296F7D8C00FEF5AD /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
-		325009432970296000FEF5AD /* LocationQueryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationQueryResult.swift; sourceTree = "<group>"; };
+		325009432970296000FEF5AD /* LocationSelectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectionModel.swift; sourceTree = "<group>"; };
 		325F9E44296ABCA500342BDD /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		326CD844296AFE0700DFB285 /* AuthenticationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationModel.swift; sourceTree = "<group>"; };
 		3292557D2969F4DD0082CA66 /* GeoPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,7 +84,6 @@
 		32EFF05E296A03BC00F51BD3 /* PhotoMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMap.swift; sourceTree = "<group>"; };
 		32EFF060296A03DA00F51BD3 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		32EFF062296A046200F51BD3 /* Gallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gallery.swift; sourceTree = "<group>"; };
-		32EFF064296A046C00F51BD3 /* Timeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timeline.swift; sourceTree = "<group>"; };
 		32EFF066296A068D00F51BD3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		32EFF068296A072200F51BD3 /* Friends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 		32EFF06A296A086E00F51BD3 /* MyPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPhoto.swift; sourceTree = "<group>"; };
@@ -190,17 +188,10 @@
 		32EFB2D7296EBD9B00DEB847 /* Gallery */ = {
 			isa = PBXGroup;
 			children = (
+				32EFB2D9296EBDE900DEB847 /* PhotoCard.swift */,
 				32EFF062296A046200F51BD3 /* Gallery.swift */,
 			);
 			path = Gallery;
-			sourceTree = "<group>";
-		};
-		32EFB2D8296EBDB100DEB847 /* Timeline */ = {
-			isa = PBXGroup;
-			children = (
-				32EFF064296A046C00F51BD3 /* Timeline.swift */,
-			);
-			path = Timeline;
 			sourceTree = "<group>";
 		};
 		32EFF05A296A02D800F51BD3 /* View */ = {
@@ -228,7 +219,7 @@
 				32500929296F12D400FEF5AD /* LocationModel.swift */,
 				3250092D296F520700FEF5AD /* Photo.swift */,
 				3250092F296F58E400FEF5AD /* PhotoData.swift */,
-				325009432970296000FEF5AD /* LocationQueryResult.swift */,
+				325009432970296000FEF5AD /* LocationSelectionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -243,10 +234,8 @@
 		32EFF06C296A088A00F51BD3 /* MyPhoto */ = {
 			isa = PBXGroup;
 			children = (
-				32EFB2D8296EBDB100DEB847 /* Timeline */,
 				32EFB2D7296EBD9B00DEB847 /* Gallery */,
 				32EFF06A296A086E00F51BD3 /* MyPhoto.swift */,
-				32EFB2D9296EBDE900DEB847 /* PhotoCard.swift */,
 			);
 			path = MyPhoto;
 			sourceTree = "<group>";
@@ -417,7 +406,7 @@
 			files = (
 				32EFB2D0296B290F00DEB847 /* GuardView.swift in Sources */,
 				329255832969F4DD0082CA66 /* ContentView.swift in Sources */,
-				325009442970296000FEF5AD /* LocationQueryResult.swift in Sources */,
+				325009442970296000FEF5AD /* LocationSelectionModel.swift in Sources */,
 				32500930296F58E400FEF5AD /* PhotoData.swift in Sources */,
 				32F9ABD9297035800053B382 /* ImagePicker.swift in Sources */,
 				32EFF063296A046200F51BD3 /* Gallery.swift in Sources */,
@@ -428,7 +417,6 @@
 				32EFB2D6296B641E00DEB847 /* VisibilityGroup.swift in Sources */,
 				32EFF069296A072200F51BD3 /* Friends.swift in Sources */,
 				32EFB2D4296B471F00DEB847 /* Router.swift in Sources */,
-				32EFF065296A046C00F51BD3 /* Timeline.swift in Sources */,
 				325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */,
 				326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */,
 				32500939296F787200FEF5AD /* ImagePickerCard.swift in Sources */,

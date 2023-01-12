@@ -12,8 +12,8 @@ import MapKit
 struct NewPhotoForm: View {
     @State private var selectedImage: UIImage? = nil
     @State private var description: String = ""
-    @State private var locationSelection = LocationSelectionModel()
     @StateObject var locationModel = LocationModel()
+    @StateObject var locationSelection: LocationSelectionModel
     
     var body: some View {
         NavigationStack {
@@ -35,7 +35,7 @@ struct NewPhotoForm: View {
                             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                         ),
                         searchMode: locationModel.locationManager.authorizationStatus != .authorizedWhenInUse,
-                        locationSelection: $locationSelection
+                        locationSelection: locationSelection
                     )
                         .environmentObject(locationModel)
                 }
@@ -58,6 +58,6 @@ struct NewPhotoForm: View {
 
 struct NewPhotoForm_Previews: PreviewProvider {
     static var previews: some View {
-        NewPhotoForm()
+        NewPhotoForm(locationSelection: LocationSelectionModel(), locationModel: LocationModel())
     }
 }
