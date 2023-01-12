@@ -15,7 +15,6 @@ struct PhotoMap: View {
     @State private var region = MKCoordinateRegion()
     @State private var showLocationOffAlert = false
     @State private var showLocationDeinedAlert = false
-//    @State var photo = Photo(uuid: "577ccbb0-91b5-11ed-91d1-0242c0a86002", user_id: 0, description: "testing photo2", timestamp: "2023-01-11T13:39:16Z", photo_url: "http://192.168.128.75:3030/static/image/04369ed0-9191-11ed-a25d-0242c0a82002/pepe.png", latitude: 22.35268, longitude: 114.20283)
     
     var body: some View {
         ZStack {
@@ -39,16 +38,13 @@ struct PhotoMap: View {
             }
                 .ignoresSafeArea(edges: .top)
                 .onAppear{
-                    panTo(.dest)
+                    panTo()
                 }
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    VStack {
-//                        iconButton("photo.fill",action: {
-//                            panTo(.dest, animated: true)
-//                        })
+                    ZStack {
                         currentLocationButton()
                             .alert("GPS is turned off", isPresented: $showLocationOffAlert){
                                 Button("Got it!", role: .cancel) { }
@@ -74,17 +70,16 @@ struct PhotoMap: View {
         case dest, user
     }
 
-    private func panTo(_ tar: PanTarget, animated: Bool = false) {
-        let coord = (tar == .dest) ? photoData.photos[0].coordinate : lm.locationManager.location!.coordinate
+    private func panTo(coord: CLLocationCoordinate2D? = nil, animated: Bool = false) {
+        guard let c = (coord == nil) ? lm.locationManager.location?.coordinate : coord else { return }
         let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-        print(coord.latitude.description)
         if animated {
             withAnimation {
-                region.center = coord
+                region.center = c
                 region.span = span
             }
         } else {
-            region = MKCoordinateRegion(center: coord, span: span)
+            region = MKCoordinateRegion(center: c, span: span)
         }
     }
     
@@ -103,7 +98,7 @@ struct PhotoMap: View {
         switch lm.locationManager.authorizationStatus {
         case .authorizedWhenInUse:
             return iconButton(action: {
-                panTo(.user, animated: true)
+                panTo(animated: true)
             })
         case .denied, .restricted:
             return iconButton("location.slash", color: .red, action: {

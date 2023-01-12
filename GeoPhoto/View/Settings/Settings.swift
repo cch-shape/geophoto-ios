@@ -13,7 +13,7 @@ struct Settings: View {
     
     // Wrapping "Enable App Lock" setting into computed property
     // so an authentication request can be prompted before enabling
-    private var appLockEnableAuthWrapper: Binding<Bool> { Binding (
+    private var appLockEnableBindWrapper: Binding<Bool> { Binding (
         get: { self.settings.appLockEnabled },
         set: { v in
             if v {
@@ -49,7 +49,7 @@ struct Settings: View {
                         header: Text("Security"),
                         footer: Text("Use \(authentication.biometryType) to unlock this App")
                     ){
-                        Toggle("Enable App Lock", isOn: appLockEnableAuthWrapper)
+                        Toggle("Enable App Lock", isOn: appLockEnableBindWrapper)
                         if settings.appLockEnabled {
                             Picker("App Lock Timeout", selection: $settings.appLockTimeout) {
                                 Text("Instant").tag(0.0)

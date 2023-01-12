@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+class AppDelegate: NSObject, UIApplicationDelegate {
+
+}
+
 @main
 struct GeoPhotoApp: App {
     @StateObject private var settings = SettingsModel()
