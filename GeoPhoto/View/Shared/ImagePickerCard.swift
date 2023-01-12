@@ -9,11 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct ImagePickerCard: View {
-//    @Binding var selectedItem: PhotosPickerItem?
-//    @Binding var selectedImageData: Data?
-    
+    @Binding var selectedImage: UIImage?
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @State private var selectedImage: UIImage?
     @State private var isImagePickerDisplay = false
     
     @State private var showSelectTypeAlert = false
@@ -25,20 +22,43 @@ struct ImagePickerCard: View {
                 showSelectTypeAlert = true
             } label: {
                 if let selectedImage {
-                    Image(uiImage: selectedImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+                    Button {
+                        showSelectTypeAlert = true
+                    } label: {
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    }
                 } else {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "camera.fill")
-                            .imageScale(.large)
-                        Spacer()
+                    List {
+                        Button {
+                            ShowPicker(sourceType: .camera)
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Image(systemName: "camera.fill")
+                                    .imageScale(.large)
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                        Divider()
+                        Button {
+                            ShowPicker(sourceType: .photoLibrary)
+                        } label: {
+                            HStack {
+                                Spacer()
+                                Image(systemName: "photo")
+                                    .imageScale(.large)
+                                Spacer()
+                            }
+                        }
+                        .padding()
                     }
                 }
             }
         }
-        .alert("Select Photo Source", isPresented: $showSelectTypeAlert){
+        .alert("Replace Photo", isPresented: $showSelectTypeAlert){
             Button("Camera") {
                 ShowPicker(sourceType: .camera)
             }
@@ -83,11 +103,5 @@ struct ImagePickerCard: View {
             self.isImagePickerDisplay = true
             return
         }
-    }
-}
-
-struct CameraPicker_Previews: PreviewProvider {
-    static var previews: some View {
-        ImagePickerCard()
     }
 }

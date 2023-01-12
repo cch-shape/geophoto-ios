@@ -11,7 +11,7 @@ import CoreLocation
 
 struct PhotoMap: View {
     @EnvironmentObject var photoData: PhotoData
-    @StateObject var lm = LocationModel()
+    @StateObject var locationModel = LocationModel()
     @State private var region = MKCoordinateRegion()
     @State private var showLocationOffAlert = false
     @State private var showLocationDeinedAlert = false
@@ -68,7 +68,7 @@ struct PhotoMap: View {
     }
 
     private func panTo(coord: CLLocationCoordinate2D? = nil, animated: Bool = false) {
-        guard let c = (coord == nil) ? lm.locationManager.location?.coordinate : coord else { return }
+        guard let c = (coord == nil) ? locationModel.locationManager.location?.coordinate : coord else { return }
         let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
         if animated {
             withAnimation {
@@ -92,7 +92,7 @@ struct PhotoMap: View {
     }
     
     private func currentLocationButton() -> some View {
-        switch lm.locationManager.authorizationStatus {
+        switch locationModel.locationManager.authorizationStatus {
         case .authorizedWhenInUse:
             return iconButton(action: {
                 panTo(animated: true)
@@ -107,7 +107,7 @@ struct PhotoMap: View {
             })
         case .notDetermined:
             return iconButton("location.slash", color: .orange, action: {
-                lm.locationManager.requestWhenInUseAuthorization()
+                locationModel.locationManager.requestWhenInUseAuthorization()
             })
         default:
             return iconButton("exclamationmark.circle", color: .gray)

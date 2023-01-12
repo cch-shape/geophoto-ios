@@ -10,30 +10,45 @@ import PhotosUI
 import MapKit
 
 struct NewPhotoForm: View {
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
+    @State private var selectedImage: UIImage? = nil
     @State private var description: String = ""
-    @State private var region = MKCoordinateRegion()
-    private var selectedLocation: CLLocationCoordinate2D {
-        region.center
-    }
+    @State private var locationSelection = LocationSelectionModel()
+    @StateObject var locationModel = LocationModel()
     
     var body: some View {
         NavigationStack {
             Form {
-                TextField("About this photo...", text: $description)
-                    .padding()
+                Section("About") {
+                    TextField("About this photo...", text: $description)
+                        .padding()
+                }
                 .listRowInsets(EdgeInsets())
                 Section("Photo") {
-                    ImagePickerCard()
-//                        .padding()
+                    ImagePickerCard(selectedImage: $selectedImage)
                 }
                 .listRowInsets(EdgeInsets())
                 Section("Location") {
-                    LocationPicker(region: $region)
+                    LocationPicker(
+                        region: MKCoordinateRegion(
+                            center: locationModel.locationManager.location?.coordinate ??
+                            CLLocationCoordinate2D(latitude: 1, longitude: 1),
+                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                        ),
+                        searchMode: locationModel.locationManager.authorizationStatus != .authorizedWhenInUse,
+                        locationSelection: $locationSelection
+                    )
+                        .environmentObject(locationModel)
                 }
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Create") {
+                        print("submit")
+                    }.disabled(false)
+                }
+
             }
             .navigationBarTitle("New Photo")
             .navigationBarTitleDisplayMode(.inline)

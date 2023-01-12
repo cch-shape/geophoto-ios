@@ -7,42 +7,30 @@
 
 import SwiftUI
 
-enum ViewState {
-    case gallery
-    case timeline
-}
-
 struct MyPhoto: View {
-    @State var viewState: ViewState = .gallery
+    @State private var isCreating = false
+    @StateObject var locationModel = LocationModel()
     
     var body: some View {
         NavigationStack {
             VStack {
-                switch viewState {
-                case .gallery:
-                    Gallery()
-                case .timeline:
-                    Timeline()
-                }
+                Gallery()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        print("add")
+                        isCreating = true
                     } label: {
                         Image(systemName: "plus")
                     }
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    Picker("ViewState", selection: $viewState) {
-                        Text("Gallery").tag(ViewState.gallery)
-                        Text("Timeline").tag(ViewState.timeline)
-                    }
-                    .pickerStyle(.segmented)
-                }
             }
             .navigationBarTitle("My Photo")
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isCreating) {
+                NewPhotoForm()
+                    .environmentObject(locationModel)
+            }
         }
     }
 }
