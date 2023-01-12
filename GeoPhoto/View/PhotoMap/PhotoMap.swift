@@ -46,17 +46,14 @@ struct PhotoMap: View {
                     Spacer()
                     ZStack {
                         currentLocationButton()
-                            .alert("GPS is turned off", isPresented: $showLocationOffAlert){
+                            .alert("GPS is turned off", isPresented: $showLocationOffAlert) {
                                 Button("Got it!", role: .cancel) { }
                             }
-                            .alert(isPresented: $showLocationDeinedAlert){
-                                Alert(
-                                    title: Text("Grant access to your location"),
-                                    primaryButton: .default(Text("Change settings")) {
-                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                    },
-                                    secondaryButton: .cancel()
-                                )
+                            .alert("Grant access to your location", isPresented: $showLocationDeinedAlert) {
+                                Button("Open Settings") {
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                }
+                                Button("Cancel", role: .cancel) {}
                             }
                     }
                     .padding(.vertical, 30)

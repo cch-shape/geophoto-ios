@@ -13,8 +13,9 @@
 		32500930296F58E400FEF5AD /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3250092F296F58E400FEF5AD /* PhotoData.swift */; };
 		32500933296F5AFC00FEF5AD /* Configs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500932296F5AFC00FEF5AD /* Configs.swift */; };
 		32500937296F75AC00FEF5AD /* NewPhotoForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500936296F75AC00FEF5AD /* NewPhotoForm.swift */; };
-		32500939296F787200FEF5AD /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500938296F787200FEF5AD /* PhotoPicker.swift */; };
+		32500939296F787200FEF5AD /* ImagePickerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32500938296F787200FEF5AD /* ImagePickerCard.swift */; };
 		3250093B296F7D8C00FEF5AD /* LocationPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3250093A296F7D8C00FEF5AD /* LocationPicker.swift */; };
+		325009442970296000FEF5AD /* LocationQueryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325009432970296000FEF5AD /* LocationQueryResult.swift */; };
 		325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325F9E44296ABCA500342BDD /* SettingsModel.swift */; };
 		326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326CD844296AFE0700DFB285 /* AuthenticationModel.swift */; };
 		329255812969F4DD0082CA66 /* GeoPhotoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329255802969F4DD0082CA66 /* GeoPhotoApp.swift */; };
@@ -35,6 +36,7 @@
 		32EFF067296A068D00F51BD3 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF066296A068D00F51BD3 /* Settings.swift */; };
 		32EFF069296A072200F51BD3 /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF068296A072200F51BD3 /* Friends.swift */; };
 		32EFF06B296A086E00F51BD3 /* MyPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32EFF06A296A086E00F51BD3 /* MyPhoto.swift */; };
+		32F9ABD9297035800053B382 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32F9ABD8297035800053B382 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,8 +63,9 @@
 		3250092F296F58E400FEF5AD /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
 		32500932296F5AFC00FEF5AD /* Configs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configs.swift; sourceTree = "<group>"; };
 		32500936296F75AC00FEF5AD /* NewPhotoForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPhotoForm.swift; sourceTree = "<group>"; };
-		32500938296F787200FEF5AD /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		32500938296F787200FEF5AD /* ImagePickerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCard.swift; sourceTree = "<group>"; };
 		3250093A296F7D8C00FEF5AD /* LocationPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPicker.swift; sourceTree = "<group>"; };
+		325009432970296000FEF5AD /* LocationQueryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationQueryResult.swift; sourceTree = "<group>"; };
 		325F9E44296ABCA500342BDD /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		326CD844296AFE0700DFB285 /* AuthenticationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationModel.swift; sourceTree = "<group>"; };
 		3292557D2969F4DD0082CA66 /* GeoPhoto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GeoPhoto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +89,7 @@
 		32EFF066296A068D00F51BD3 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		32EFF068296A072200F51BD3 /* Friends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 		32EFF06A296A086E00F51BD3 /* MyPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPhoto.swift; sourceTree = "<group>"; };
+		32F9ABD8297035800053B382 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,7 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				32500936296F75AC00FEF5AD /* NewPhotoForm.swift */,
-				32500938296F787200FEF5AD /* PhotoPicker.swift */,
+				32500938296F787200FEF5AD /* ImagePickerCard.swift */,
 				3250093A296F7D8C00FEF5AD /* LocationPicker.swift */,
 			);
 			path = Shared;
@@ -218,11 +222,13 @@
 		32EFF05C296A034F00F51BD3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				32F9ABD8297035800053B382 /* ImagePicker.swift */,
 				325F9E44296ABCA500342BDD /* SettingsModel.swift */,
 				326CD844296AFE0700DFB285 /* AuthenticationModel.swift */,
 				32500929296F12D400FEF5AD /* LocationModel.swift */,
 				3250092D296F520700FEF5AD /* Photo.swift */,
 				3250092F296F58E400FEF5AD /* PhotoData.swift */,
+				325009432970296000FEF5AD /* LocationQueryResult.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -411,7 +417,9 @@
 			files = (
 				32EFB2D0296B290F00DEB847 /* GuardView.swift in Sources */,
 				329255832969F4DD0082CA66 /* ContentView.swift in Sources */,
+				325009442970296000FEF5AD /* LocationQueryResult.swift in Sources */,
 				32500930296F58E400FEF5AD /* PhotoData.swift in Sources */,
+				32F9ABD9297035800053B382 /* ImagePicker.swift in Sources */,
 				32EFF063296A046200F51BD3 /* Gallery.swift in Sources */,
 				32500933296F5AFC00FEF5AD /* Configs.swift in Sources */,
 				32EFF061296A03DA00F51BD3 /* Home.swift in Sources */,
@@ -423,7 +431,7 @@
 				32EFF065296A046C00F51BD3 /* Timeline.swift in Sources */,
 				325F9E45296ABCA500342BDD /* SettingsModel.swift in Sources */,
 				326CD845296AFE0700DFB285 /* AuthenticationModel.swift in Sources */,
-				32500939296F787200FEF5AD /* PhotoPicker.swift in Sources */,
+				32500939296F787200FEF5AD /* ImagePickerCard.swift in Sources */,
 				32EFF067296A068D00F51BD3 /* Settings.swift in Sources */,
 				3250093B296F7D8C00FEF5AD /* LocationPicker.swift in Sources */,
 				3250092E296F520700FEF5AD /* Photo.swift in Sources */,
@@ -592,7 +600,8 @@
 				DEVELOPMENT_TEAM = 985HP328XC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Grant access to show your location";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Grant access to your camera";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Grant access to your current location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -622,7 +631,8 @@
 				DEVELOPMENT_TEAM = 985HP328XC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Grant access to show your location";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Grant access to your camera";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Grant access to your current location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

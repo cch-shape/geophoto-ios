@@ -49,120 +49,28 @@ struct LocationPicker: View {
     @State private var reselectingAddress = false
     @State private var showNoResultAlert = false
     @FocusState private var searchFocusing: Bool
-    @StateObject private var queryResult = QueryResult()
+    @StateObject private var queryResult = LocationQueryResult()
     
     var body: some View {
         VStack(spacing: 8) {
-            Picker("EditMode`", selection: searchModeBindWrapper) {
-                Image(systemName: lm.locationManager.authorizationStatus == .authorizedWhenInUse ? "pin.fill" : "pin.slash")
-                    .tag(false)
-                Image(systemName: "magnifyingglass")
-                    .tag(true)
-            }
-            .pickerStyle(.segmented)
+            ModeSwitcher
             
-            ZStack {
-                Map(
-                    coordinateRegion: $region,
-                    showsUserLocation: !searchMode,
-                    annotationItems: searchMode ? [queryResult.selected] : []
-                ) { item in
-                    MapMarker(coordinate: item.coordinate)
-                }
-                .onAppear{
-                    searchMode = lm.locationManager.authorizationStatus != .authorizedWhenInUse
-                    panTo()
-                }
-                .onChange(of: searchMode, perform: { _ in
-                    panTo()
-                })
-                .onChange(of: lm.locationManager.authorizationStatus, perform: { status in
-                    if status != .authorizedWhenInUse && !searchMode {
-                        searchMode = true
-                    }
-                })
-                .cornerRadius(10)
-                .aspectRatio(1.6, contentMode: .fill)
-                
-                VStack {
-                    HStack {
-                        Spacer()
-                        ZStack {
-                            Button {
-                                panTo()
-                            } label: {
-                                Image(systemName: "location.fill")
-                                    .padding()
-                                    .background(in: Circle())
-                            }
-                                .alert("GPS is turned off", isPresented: $showLocationOffAlert){
-                                    Button("Got it!", role: .cancel) { }
-                                }
-                                .alert(isPresented: $showLocationDeinedAlert){
-                                    Alert(
-                                        title: Text("Grant access to your location"),
-                                        primaryButton: .default(Text("Change settings")) {
-                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                        },
-                                        secondaryButton: .cancel()
-                                    )
-                                }
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 10)
-                    }
-                    Spacer()
-                }
-            }
+            MiniMap
             
             if searchMode {
                 if reselectingAddress || queryResult.selected.address.isEmpty {
-                    HStack {
-                        Image(systemName: "location.magnifyingglass")
-                            .foregroundColor(Color(UIColor.placeholderText))
-                        TextField("Search Location...", text: $query)
-                            .focused($searchFocusing)
-                            .onSubmit {
-                                searchLocation(query: query)
-                            }
-                            .submitLabel(.search)
-                            .alert(isPresented: $showNoResultAlert){
-                                Alert(
-                                    title: Text("No matching location found"),
-                                    primaryButton: .default(Text("Try again")) {
-                                        searchFocusing = true
-                                    },
-                                    secondaryButton: .cancel() {
-                                        reselectingAddress = false
-                                    }
-                                )
-                            }
-                        if searchFocusing {
-                            Button {
-                                query = ""
-                                searchFocusing = false
-                                reselectingAddress = false
-                            } label: {
-                                Text("Cancel")
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.secondarySystemGroupedBackground)))
-                    .sheet(isPresented: $queryResult.showQueryResult) { QueryResultSheet }
+                    AddressSearchGroup
                 } else {
                     Button {
                         query = queryResult.selected.name
                         reselectingAddress = true
                         searchFocusing = true
                     } label: {
-                        Text(queryResult.selected.address)
-                            .font(.footnote)
+                        AddressFooter
                     }
                 }
             } else if !queryResult.selected.address.isEmpty {
-                Text(queryResult.selected.address)
-                    .font(.footnote)
+                AddressFooter
             }
         }
         .transaction { transaction in
@@ -170,7 +78,7 @@ struct LocationPicker: View {
         }
     }
     
-    
+    // Custom functions
     private func panTo() {
         var coord: CLLocationCoordinate2D
         if searchMode {
@@ -178,11 +86,11 @@ struct LocationPicker: View {
         } else {
             guard let c = lm.locationManager.location?.coordinate else { return }
             coord = c
+            queryResult.selected.coordinate = coord
+            geocodingCurrentLocation()
         }
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         region = MKCoordinateRegion(center: coord, span: span)
-        queryResult.selected.coordinate = coord
-        geocodingCurrentLocation()
     }
     
     private func searchLocation(query: String) {
@@ -222,6 +130,112 @@ struct LocationPicker: View {
         }
     }
     
+    // Custom Views
+    var ModeSwitcher: some View {
+        Picker("EditMode`", selection: searchModeBindWrapper) {
+            Image(systemName: lm.locationManager.authorizationStatus == .authorizedWhenInUse ? "pin.fill" : "pin.slash")
+                .tag(false)
+            Image(systemName: "magnifyingglass")
+                .tag(true)
+        }
+        .pickerStyle(.segmented)
+        .alert("GPS is turned off", isPresented: $showLocationOffAlert){
+            Button("Got it!", role: .cancel) { }
+        }
+        .alert("Grant access to your location", isPresented: $showLocationDeinedAlert) {
+            Button("Open Settings") {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+    }
+    
+    var MiniMap: some View {
+        ZStack {
+            Map(
+                coordinateRegion: $region,
+                showsUserLocation: !searchMode,
+                annotationItems: searchMode ? [queryResult.selected] : []
+            ) { item in
+                MapMarker(coordinate: item.coordinate)
+            }
+            .onAppear{
+                searchMode = lm.locationManager.authorizationStatus != .authorizedWhenInUse
+                panTo()
+            }
+            .onChange(of: searchMode, perform: { _ in
+                panTo()
+            })
+            .onChange(of: lm.locationManager.authorizationStatus, perform: { status in
+                if status != .authorizedWhenInUse && !searchMode {
+                    searchMode = true
+                }
+            })
+            .cornerRadius(10)
+            .aspectRatio(1.8, contentMode: .fill)
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    ZStack {
+                        Button {
+                            panTo()
+                        } label: {
+                            Image(systemName: "location.fill")
+                                .padding()
+                                .background(in: Circle())
+                        }
+                    }
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 10)
+                }
+                Spacer()
+            }
+        }
+    }
+    
+    var AddressSearchGroup: some View {
+        HStack {
+            Image(systemName: "location.magnifyingglass")
+                .foregroundColor(Color(UIColor.placeholderText))
+            TextField("Search Location...", text: $query)
+                .focused($searchFocusing)
+                .submitLabel(.return)
+                .alert("No match found", isPresented: $showNoResultAlert) {
+                    Button("Try Again") {
+                        searchFocusing = true
+                    }
+                    Button("Cancel", role: .cancel) {
+                        reselectingAddress = false
+                    }
+                }
+            if !query.isEmpty {
+                if searchFocusing {
+                    Button {
+                        searchLocation(query: query)
+                    } label: {
+                        Text("Search")
+                    }
+                } else {
+                    Button {
+                        query = ""
+                    } label: {
+                        Image(systemName: "multiply.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.secondarySystemGroupedBackground)))
+        .sheet(isPresented: $queryResult.showQueryResult) { QueryResultSheet }
+    }
+    
+    var AddressFooter: some View {
+        Text(queryResult.selected.address)
+            .font(.footnote)
+    }
+    
     var QueryResultSheet: some View {
         NavigationView {
             List(queryResult.options) { result in
@@ -248,39 +262,6 @@ struct LocationPicker: View {
             }
             .navigationTitle("Select location")
             .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
-    class QueryResult: ObservableObject{
-        struct Option: Identifiable {
-            let id = UUID()
-            var name: String
-            var address: String
-            var coordinate: CLLocationCoordinate2D
-        }
-        
-        @Published var options: [Option] = []
-        @Published var showQueryResult = false
-        @Published var selected: Option = Option(name: "", address: "", coordinate: CLLocationCoordinate2D(latitude: 1, longitude: 1))
-        
-        func append(name: String, address: String, coordinate: CLLocationCoordinate2D) {
-            self.options.append(Option(name: name, address: address, coordinate: coordinate))
-        }
-        
-        func show() {
-            if !self.options.isEmpty {
-                showQueryResult = true
-            }
-        }
-        
-        func dismiss() {
-            self.options.removeAll()
-            showQueryResult = false
-        }
-        
-        func select(_ opt: Option) {
-            self.selected = opt
-            dismiss()
         }
     }
 }

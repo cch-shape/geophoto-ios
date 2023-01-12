@@ -21,9 +21,12 @@ struct NewPhotoForm: View {
     var body: some View {
         NavigationStack {
             Form {
+                TextField("About this photo...", text: $description)
+                    .padding()
+                .listRowInsets(EdgeInsets())
                 Section("Photo") {
-                    PhotoPicker(selectedItem: $selectedItem, selectedImageData: $selectedImageData)
-                        .padding()
+                    ImagePickerCard()
+//                        .padding()
                 }
                 .listRowInsets(EdgeInsets())
                 Section("Location") {
@@ -31,11 +34,6 @@ struct NewPhotoForm: View {
                 }
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
-                Section("Description") {
-                    TextField("About this photo", text: $description)
-                        .padding()
-                }
-                .listRowInsets(EdgeInsets())
             }
             .navigationBarTitle("New Photo")
             .navigationBarTitleDisplayMode(.inline)
