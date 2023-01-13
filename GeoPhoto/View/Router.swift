@@ -10,13 +10,17 @@ import SwiftUI
 struct Router: View {
     @Environment(\.scenePhase) var scenePhase
     @EnvironmentObject var settings: SettingsModel
-    @EnvironmentObject var authentication: AuthenticationModel
+    @EnvironmentObject var authentication: BiometricModel
+    @EnvironmentObject var user: UserModel
     
     var GuardView: GuardView
     var ProtectedView: ContentView
     
     var body: some View {
-        if settings.appLockEnabled && !authentication.isAuthenticated {
+        if user.authorizationStatus != UserModel.AuthorizationStatus.loggedIn {
+            LoginView()
+                .environmentObject(user)
+        } else if settings.appLockEnabled && !authentication.isAuthenticated {
             GuardView
                 .environmentObject(authentication)
                 .onChange(of: scenePhase) { phase in
@@ -29,6 +33,7 @@ struct Router: View {
             ProtectedView
                 .environmentObject(settings)
                 .environmentObject(authentication)
+                .environmentObject(user)
                 .onChange(of: scenePhase) { phase in
                     if settings.appLockEnabled && phase == .inactive
                     {

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct Settings: View {
     @EnvironmentObject var settings: SettingsModel
-    @EnvironmentObject var authentication: AuthenticationModel
+    @EnvironmentObject var authentication: BiometricModel
+    @EnvironmentObject var user: UserModel
+    @State var showLogoutAlert = false
     
     // Wrapping "Enable App Lock" setting into computed property
     // so an authentication request can be prompted before enabling
@@ -37,6 +39,13 @@ struct Settings: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section(header: Text("Your Phone number")) {
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .imageScale(.large)
+                        Text(UserModel.User.currentUser?.phone_number ?? "")
+                    }
+                }
                 Section(header: Text("Appearance")) {
                     Picker("Theme", selection: $settings.theme) {
                         ForEach(SettingsModel.Theme.allCases) {
@@ -65,13 +74,22 @@ struct Settings: View {
                 }
                 Section(header: Text("Privacy")) {
                     Toggle("Upload Photo by Default", isOn: $settings.uploadPhotoByDefault)
-                    Picker("Default Photo Visibility", selection: $settings.defaultPhotoVisibility) {
-                        ForEach(SettingsModel.PhotoVisibility.allCases) {
-                            Text($0.rawValue).tag($0)
-                        }
-                    }
-                    NavigationLink("Visibility Groups", destination: VisibilityGroup())
+//                    Picker("Default Photo Visibility", selection: $settings.defaultPhotoVisibility) {
+//                        ForEach(SettingsModel.PhotoVisibility.allCases) {
+//                            Text($0.rawValue).tag($0)
+//                        }
+//                    }
+//                    NavigationLink("Visibility Groups", destination: VisibilityGroup())
                 }
+                Button("Logout") {
+                    user.logout()
+                }.foregroundColor(.red)
+                    .alert("Are you sure?", isPresented: $showLogoutAlert) {
+                        Button("Logout", role: .destructive) {
+                            user.logout()
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    }
             }
             .navigationBarTitle("Settings")
             .pickerStyle(.navigationLink)
@@ -84,6 +102,6 @@ struct Settings_Previews: PreviewProvider {
     static var previews: some View {
         Settings()
             .environmentObject(SettingsModel())
-            .environmentObject(AuthenticationModel())
+            .environmentObject(BiometricModel())
     }
 }

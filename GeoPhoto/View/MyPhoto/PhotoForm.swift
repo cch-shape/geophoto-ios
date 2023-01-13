@@ -11,15 +11,22 @@ import MapKit
 
 struct PhotoForm: View {
     @StateObject var locationModel = LocationModel()
-    @Binding var photo: Photo?
+    @Binding var photo: PhotoModel?
     @State var region: MKCoordinateRegion
     @State var showDeleteAlert = false
+    @EnvironmentObject var photoData: PhotoData
     
     var body: some View {
         NavigationStack {
             if let photo {
                 ScrollView {
                     VStack {
+                        HStack {
+                            Spacer()
+                            Text(photo.timestampDisplay)
+                                .font(.caption)
+                                .padding(.horizontal)
+                        }
                         AsyncImage(url: photo.thumbnail_url_2x) { img in
                             img
                                 .resizable()
@@ -29,9 +36,7 @@ struct PhotoForm: View {
                         }
                         .cornerRadius(10)
                         .padding(.horizontal)
-                        .padding(.bottom, 4)
                         
-                        //                    VStack {
                         ZStack {
                             Map(
                                 coordinateRegion: $region,
@@ -97,7 +102,6 @@ struct PhotoForm: View {
                             Text(photo.address ?? "")
                                 .font(.footnote)
                         }
-                        
                         Button{
                             showDeleteAlert = true
                         } label: {
@@ -111,7 +115,8 @@ struct PhotoForm: View {
                         .padding()
                         .alert("Are you sure?", isPresented: $showDeleteAlert) {
                             Button("Delete", role: .destructive) {
-                                
+                                photoData.delete(uuid: photo.uuid)
+                                self.photo = nil
                             }
                             Button("Cancel", role: .cancel) {}
                         }

@@ -15,6 +15,7 @@ struct PhotoMap: View {
     @State private var region = MKCoordinateRegion()
     @State private var showLocationOffAlert = false
     @State private var showLocationDeinedAlert = false
+    @State private var selectedPhoto: PhotoModel? = nil
     
     var body: some View {
         ZStack {
@@ -24,16 +25,29 @@ struct PhotoMap: View {
                 annotationItems: photoData.photos
             ) { p in
                 MapAnnotation(coordinate: p.coordinate) {
-                    AsyncImage(url: p.thumbnail_url_1x) { img in
-                        img
-                            .resizable()
-                            .scaledToFill()
-                    } placeholder: {
-                        ProgressView()
+                    Button {
+                        selectedPhoto = p
+                    } label: {
+                        AsyncImage(url: p.thumbnail_url_1x) { img in
+                            img
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(10)
+                        .shadow(radius: 4)
                     }
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(10)
-                    .shadow(radius: 4)
+                    .sheet(item: $selectedPhoto) { p in
+                        PhotoForm(
+                            photo: $selectedPhoto,
+                            region: MKCoordinateRegion(
+                                center: p.coordinate,
+                                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                            )
+                        )
+                    }
                 }
             }
                 .ignoresSafeArea(edges: .top)

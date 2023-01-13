@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GuardView: View {
-    @EnvironmentObject var authentication: AuthenticationModel
+    @EnvironmentObject var authentication: BiometricModel
     
     var body: some View {
         VStack {

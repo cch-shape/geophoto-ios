@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct Home: View {
+    @EnvironmentObject var user: UserModel
+    
     var body: some View {
-        Text("Home")
-//        NewPhotoForm()
+        Text(UserModel.User.currentUser?.phone_number ?? "")
     }
 }
 

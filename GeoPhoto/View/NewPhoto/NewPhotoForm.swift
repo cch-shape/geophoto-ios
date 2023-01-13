@@ -56,7 +56,7 @@ struct NewPhotoForm: View {
                                 guard let img = selectedImage else {
                                     return
                                 }
-                                photoData.POST(description: description, image: img, lsmo: locationSelection.selected)
+                                photoData.post(description: description, image: img, lsmo: locationSelection.selected)
                             }.disabled(selectedImage == nil)
                         }
                         ToolbarItem(placement: .navigationBarLeading) {

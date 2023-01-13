@@ -21,7 +21,7 @@ struct MyPhoto: View {
         case small = 3
     }
     @State private var selectedSize: imageSize = .medium
-    @State private var selectedPhoto: Photo? = nil
+    @State private var selectedPhoto: PhotoModel? = nil
     
     var body: some View {
         NavigationStack {
@@ -46,6 +46,7 @@ struct MyPhoto: View {
                                             span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                                         )
                                     )
+                                    .environmentObject(photoData)
                                 }
                             }
                             .aspectRatio(1, contentMode: .fit)

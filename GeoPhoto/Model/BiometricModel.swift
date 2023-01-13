@@ -8,7 +8,7 @@
 import Foundation
 import LocalAuthentication
 
-final class AuthenticationModel: ObservableObject {
+final class BiometricModel: ObservableObject {
     var context = LAContext()
     var biometryType: String
     var authenticatedAt = Date.distantPast

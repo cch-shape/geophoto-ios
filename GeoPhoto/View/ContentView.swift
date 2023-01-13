@@ -11,15 +11,17 @@ import CoreLocation
 struct ContentView: View {
     @StateObject var photoData = PhotoData()
     @EnvironmentObject var settings: SettingsModel
-    @EnvironmentObject var authentication: AuthenticationModel
+    @EnvironmentObject var authentication: BiometricModel
+    @EnvironmentObject var user: UserModel
     
     var body: some View {
         TabView() {
-            Home()
-                .badge(0)
-                .tabItem{
-                    Label("Home", systemImage: "house")
-                }
+//            Home()
+//                .badge(0)
+//                .tabItem{
+//                    Label("Home", systemImage: "house")
+//                }
+//                .environmentObject(user)
             MyPhoto()
                 .badge(0)
                 .tabItem{
@@ -32,16 +34,17 @@ struct ContentView: View {
                     Label("Map", systemImage: "pin.circle")
                 }
                 .environmentObject(photoData)
-            Friends()
-                .badge(0)
-                .tabItem{
-                    Label("Friends", systemImage: "person.2")
-                }
+//            Friends()
+//                .badge(0)
+//                .tabItem{
+//                    Label("Friends", systemImage: "person.2")
+//                }
             Settings()
                 .badge(0)
                 .tabItem{
                     Label("Settings", systemImage: "gearshape")
                 }
+                .environmentObject(user)
         }
     }
 }
@@ -52,16 +55,16 @@ struct ContentView_Previews: PreviewProvider {
             .previewDevice(PreviewDevice(rawValue: "iPhone 14"))
             .previewDisplayName("iPhone 14")
             .environmentObject(SettingsModel())
-            .environmentObject(AuthenticationModel())
+            .environmentObject(BiometricModel())
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPhone SE (3rd generation)"))
             .previewDisplayName("iPhone SE")
             .environmentObject(SettingsModel())
-            .environmentObject(AuthenticationModel())
+            .environmentObject(BiometricModel())
         ContentView()
             .previewDevice(PreviewDevice(rawValue: "iPad (10th generation)"))
             .previewDisplayName("iPad")
             .environmentObject(SettingsModel())
-            .environmentObject(AuthenticationModel())
+            .environmentObject(BiometricModel())
     }
 }

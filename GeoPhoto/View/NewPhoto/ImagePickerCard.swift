@@ -33,7 +33,9 @@ struct ImagePickerCard: View {
                     Image(systemName: "camera.fill")
                         .imageScale(.large)
                         .padding()
+                        .background(.clear)
                         .onTapGesture {
+                            print(1)
                             ShowPicker(sourceType: .camera)
                         }
                     Spacer()
@@ -44,7 +46,9 @@ struct ImagePickerCard: View {
                     Image(systemName: "photo")
                         .imageScale(.large)
                         .padding()
+                        .background(.clear)
                         .onTapGesture {
+                            print(2)
                             ShowPicker(sourceType: .photoLibrary)
                         }
                     Spacer()

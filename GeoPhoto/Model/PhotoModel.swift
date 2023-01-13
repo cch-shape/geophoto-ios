@@ -8,13 +8,18 @@
 import Foundation
 import CoreLocation
 
-struct Photo: Identifiable, Decodable {
+struct PhotoModel: Identifiable, Decodable {
     let id, uuid: String
     let user_id: Int
     var description: String?
     var address_name: String?
     var address: String?
     var timestamp: Date
+    var timestampDisplay: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("MMM d, yyyy")
+        return dateFormatter.string(from: timestamp)
+    }
     var photo_url: URL?
     var thumbnail_url_1x: URL?
     var thumbnail_url_2x: URL?
@@ -60,7 +65,7 @@ struct Photo: Identifiable, Decodable {
 
 struct PhotosResponse: Decodable{
     let success: Bool
-    let photos: [Photo]
+    let photos: [PhotoModel]
 
     enum CodingKeys: String, CodingKey {
         case success
@@ -70,7 +75,7 @@ struct PhotosResponse: Decodable{
 
 struct PhotoResponse: Decodable {
     let success: Bool
-    let photo: Photo
+    let photo: PhotoModel
 
     enum CodingKeys: String, CodingKey {
         case success
