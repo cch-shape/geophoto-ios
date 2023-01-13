@@ -24,7 +24,7 @@ struct PhotoMap: View {
                 annotationItems: photoData.photos
             ) { p in
                 MapAnnotation(coordinate: p.coordinate) {
-                    AsyncImage(url: p.photo_url) { img in
+                    AsyncImage(url: p.thumbnail_url_1x) { img in
                         img
                             .resizable()
                             .scaledToFill()
@@ -49,7 +49,7 @@ struct PhotoMap: View {
                             .alert("GPS is turned off", isPresented: $showLocationOffAlert) {
                                 Button("Got it!", role: .cancel) { }
                             }
-                            .alert("Grant access to your location", isPresented: $showLocationDeinedAlert) {
+                            .alert(Configs.LocationDeinedMsg, isPresented: $showLocationDeinedAlert) {
                                 Button("Open Settings") {
                                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                 }

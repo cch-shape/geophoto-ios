@@ -8,4 +8,6 @@
 struct Configs {
     static let serverHost = "http://192.168.128.75:3030"
     static let apiBaseURL = "\(serverHost)/api"
+    static let LocationDeinedMsg = "No access to location"
+    static let CameraDeinedMsg = "No access to camera"
 }

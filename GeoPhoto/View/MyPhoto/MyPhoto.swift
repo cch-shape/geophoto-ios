@@ -8,16 +8,52 @@
 import SwiftUI
 import CoreLocation
 import Contacts
+import MapKit
 
 struct MyPhoto: View {
-    @State private var isCreating = false
+    @State var isCreating = false
     @StateObject var locationModel = LocationModel()
+    @EnvironmentObject var photoData: PhotoData
     var locationSelection = LocationSelectionModel()
+    enum imageSize: Int {
+        case large = 1
+        case medium = 2
+        case small = 3
+    }
+    @State private var selectedSize: imageSize = .medium
+    @State private var selectedPhoto: Photo? = nil
     
     var body: some View {
         NavigationStack {
             VStack {
-                Gallery()
+                ScrollView {
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: selectedSize.rawValue)) {
+                        ForEach(photoData.photos) { p in
+                            GeometryReader { reader in
+                                Button {
+                                    selectedPhoto = p
+                                } label: {
+                                    PhotoCard(
+                                        size: reader.size.width,
+                                              url: selectedSize == .large ? p.thumbnail_url_2x : p.thumbnail_url_1x
+                                    )
+                                }
+                                .sheet(item: $selectedPhoto) { p in
+                                    PhotoForm(
+                                        photo: $selectedPhoto,
+                                        region: MKCoordinateRegion(
+                                            center: p.coordinate,
+                                            span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                                        )
+                                    )
+                                }
+                            }
+                            .aspectRatio(1, contentMode: .fit)
+                        }
+                    }
+                    .padding()
+                }
+                    .environmentObject(photoData)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -40,13 +76,26 @@ struct MyPhoto: View {
                         Image(systemName: "plus")
                     }
                 }
+                ToolbarItem(placement: .bottomBar) {
+                    Picker("Image Size", selection: $selectedSize) {
+                        Text("Small").tag(imageSize.small)
+                        Text("Medium").tag(imageSize.medium)
+                        Text("Large").tag(imageSize.large)
+                    }
+                    .pickerStyle(.segmented)
+                }
             }
             .navigationBarTitle("My Photo")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isCreating) {
-                NewPhotoForm(locationSelection: locationSelection)
+                NewPhotoForm(isPresent: $isCreating, locationSelection: locationSelection)
                     .environmentObject(locationModel)
             }
+            .onReceive(photoData.$isLoading, perform: { isLoading in
+                if !isLoading {
+                    isCreating = false
+                }
+            })
         }
     }
 }
@@ -54,5 +103,6 @@ struct MyPhoto: View {
 struct MyPhoto_Previews: PreviewProvider {
     static var previews: some View {
         MyPhoto()
+            .environmentObject(PhotoData())
     }
 }

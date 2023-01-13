@@ -15,6 +15,7 @@ struct LocationPicker: View {
     
     @ObservedObject var locationSelection: LocationSelectionModel
     @EnvironmentObject var locationModel: LocationModel
+    @EnvironmentObject var photoData: PhotoData
     struct Marker: Identifiable {
         let id = UUID()
     }
@@ -57,22 +58,13 @@ struct LocationPicker: View {
         VStack(spacing: 8) {
             ModeSwitcher
             
-            if searchMode {
-                if reselectingAddress || locationSelection.selected.address.isEmpty {
-                    AddressSearchGroup
-                } else {
-                    Button {
-                        reselectingAddress = true
-                        searchFocusing = true
-                    } label: {
-                        AddressFooter
-                    }
-                }
-            } else if !locationSelection.selected.address.isEmpty {
-                AddressFooter
-            }
-            
             MiniMap
+            
+            AddressFooter
+            
+            if searchMode {
+                AddressSearchGroup
+            }
         }
         .transaction { transaction in
             transaction.animation = nil
@@ -122,11 +114,13 @@ struct LocationPicker: View {
         CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coord.latitude, longitude: coord.longitude)) {
             placemarks, error in
             guard let placemark = placemarks?.first else { return }
-            let formatter = CNPostalAddressFormatter()
-            let address = formatter.string(from: placemark.postalAddress!).split(separator: "\n").reversed().joined(separator: ", ")
-            locationSelection.select(LocationSelectionModel.Option(
-                name: address, address: address, coordinate: coord
-            ))
+            DispatchQueue.main.async {
+                let formatter = CNPostalAddressFormatter()
+                let address = formatter.string(from: placemark.postalAddress!).split(separator: "\n").reversed().joined(separator: ", ")
+                locationSelection.select(LocationSelectionModel.Option(
+                    name: placemark.name ?? "", address: address, coordinate: coord
+                ))
+            }
         }
     }
     
@@ -142,7 +136,7 @@ struct LocationPicker: View {
         .alert("GPS is turned off", isPresented: $showLocationOffAlert){
             Button("Got it!", role: .cancel) { }
         }
-        .alert("Grant access to your location", isPresented: $showLocationDeinedAlert) {
+        .alert(Configs.LocationDeinedMsg, isPresented: $showLocationDeinedAlert) {
             Button("Open Settings") {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }
@@ -160,9 +154,6 @@ struct LocationPicker: View {
                 MapMarker(coordinate: item.coordinate)
             }
             .onChange(of: searchMode, perform: { _ in
-                if searchMode {
-                    
-                }
                 panTo()
             })
             .onChange(of: locationModel.locationManager.authorizationStatus, perform: { status in
@@ -177,20 +168,22 @@ struct LocationPicker: View {
                 HStack {
                     Spacer()
                     ZStack {
-                        Button {
-                            panTo()
-                        } label: {
-                            Image(systemName: "location.fill")
-                                .padding()
-                                .background(.background)
-                        }
+                        Image(systemName: "location.fill")
+                            .padding()
+                            .background(.background)
+                            .onTapGesture {
+                                panTo()
+                            }
                         .clipShape(Circle())
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 10)
+                    .foregroundColor(.accentColor)
                 }
                 Spacer()
             }
+        }.onAppear{
+            panTo()
         }
     }
     
@@ -209,14 +202,13 @@ struct LocationPicker: View {
                         searchFocusing = true
                     }
                     Button("Cancel", role: .cancel) {
-                        reselectingAddress = false
+                        query = ""
                     }
                 }
             if !query.isEmpty {
                 Button {
                     query = ""
                     searchFocusing = false
-                    reselectingAddress = false
                 } label: {
                     Image(systemName: "multiply.circle.fill")
                         .foregroundColor(.gray)
@@ -232,8 +224,13 @@ struct LocationPicker: View {
     }
     
     var AddressFooter: some View {
-        Text(locationSelection.selected.address)
-            .font(.footnote)
+        Section {
+            Text(locationSelection.selected.name)
+                .font(.footnote)
+                .bold()
+            Text(locationSelection.selected.address)
+                .font(.footnote)
+        }
     }
     
     var QueryResultSheet: some View {
@@ -242,7 +239,6 @@ struct LocationPicker: View {
                 Button {
                     locationSelection.select(result)
                     query = ""
-                    reselectingAddress = false
                     panTo()
                 } label: {
                     VStack(alignment: .leading) {
@@ -265,3 +261,12 @@ struct LocationPicker: View {
         }
     }
 }
+
+struct LocationPicker_Previews: PreviewProvider {
+    static var previews: some View {
+        LocationPicker(region: MKCoordinateRegion(), searchMode: false, locationSelection: LocationSelectionModel())
+            .environmentObject(PhotoData())
+            .environmentObject(LocationModel())
+    }
+}
+

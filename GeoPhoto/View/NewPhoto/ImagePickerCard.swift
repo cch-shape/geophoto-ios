@@ -10,6 +10,7 @@ import PhotosUI
 
 struct ImagePickerCard: View {
     @Binding var selectedImage: UIImage?
+    @EnvironmentObject var photoData: PhotoData
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var isImagePickerDisplay = false
     
@@ -18,43 +19,35 @@ struct ImagePickerCard: View {
     
     var body: some View {
         HStack {
-            Button {
-                showSelectTypeAlert = true
-            } label: {
-                if let selectedImage {
-                    Button {
-                        showSelectTypeAlert = true
-                    } label: {
-                        Image(uiImage: selectedImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    }
-                } else {
-                    List {
-                        Button {
+            if let selectedImage {
+                Button {
+                    showSelectTypeAlert = true
+                } label: {
+                    Image(uiImage: selectedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                }
+            } else {
+                HStack {
+                    Spacer()
+                    Image(systemName: "camera.fill")
+                        .imageScale(.large)
+                        .padding()
+                        .onTapGesture {
                             ShowPicker(sourceType: .camera)
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "camera.fill")
-                                    .imageScale(.large)
-                                Spacer()
-                            }
                         }
+                    Spacer()
+                }
+                Divider()
+                HStack {
+                    Spacer()
+                    Image(systemName: "photo")
+                        .imageScale(.large)
                         .padding()
-                        Divider()
-                        Button {
+                        .onTapGesture {
                             ShowPicker(sourceType: .photoLibrary)
-                        } label: {
-                            HStack {
-                                Spacer()
-                                Image(systemName: "photo")
-                                    .imageScale(.large)
-                                Spacer()
-                            }
                         }
-                        .padding()
-                    }
+                    Spacer()
                 }
             }
         }
@@ -67,7 +60,7 @@ struct ImagePickerCard: View {
             }
             Button("Cancel", role: .cancel) {}
         }
-        .alert("Grant access to your camera", isPresented: $showPermissionAlert){
+        .alert(Configs.CameraDeinedMsg, isPresented: $showPermissionAlert){
             Button("Open Settings") {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }
