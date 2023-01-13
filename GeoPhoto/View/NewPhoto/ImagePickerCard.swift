@@ -35,8 +35,7 @@ struct ImagePickerCard: View {
                         .padding()
                         .background(.clear)
                         .onTapGesture {
-                            print(1)
-                            ShowPicker(sourceType: .camera)
+                            showSelectTypeAlert = true
                         }
                     Spacer()
                 }
@@ -48,8 +47,7 @@ struct ImagePickerCard: View {
                         .padding()
                         .background(.clear)
                         .onTapGesture {
-                            print(2)
-                            ShowPicker(sourceType: .photoLibrary)
+                            showSelectTypeAlert = true
                         }
                     Spacer()
                 }
